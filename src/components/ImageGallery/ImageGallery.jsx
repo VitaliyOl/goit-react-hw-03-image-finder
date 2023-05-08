@@ -4,6 +4,7 @@ import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import imagesApi from '../services/fetchApi';
 import Modal from 'components/Modal/Modal';
 import { Button } from 'components/Button/Button';
+import Loader from '../Loader/Loader';
 
 const Status = {
   IDLE: 'idle',
@@ -22,6 +23,8 @@ export default class ImageGallery extends Component {
     totalPages: 0,
     showModal: false,
     modalData: {},
+
+    loadMores: null,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -72,10 +75,10 @@ export default class ImageGallery extends Component {
     const { value } = this.props;
 
     if (status === 'idle') {
-      return <h1>Lets Go</h1>;
+      return <h1 style={{ margin: '0 auto' }}>Lets Go!</h1>;
     }
     if (status === 'pending') {
-      return <h1>Load...</h1>;
+      return <Loader />;
     }
     if (status === 'rejected') {
       return <h1>{error.message}</h1>;
@@ -88,19 +91,22 @@ export default class ImageGallery extends Component {
 
     if (status === 'resolved') {
       return (
-        <Gallery>
-          {images.map(image => (
-            <ImageGalleryItem
-              key={image.id}
-              item={image}
-              onImageClick={this.setModalData}
-            />
-          ))}
+        <>
+          <Gallery>
+            {images.map(image => (
+              <ImageGalleryItem
+                key={image.id}
+                item={image}
+                onImageClick={this.setModalData}
+              />
+            ))}
+          </Gallery>
+
           {images.length > 0 && status !== 'pending' && page <= totalPages && (
             <Button onClick={this.loadMore}>Load More</Button>
           )}
           {showModal && <Modal data={modalData} onClose={this.togleModal} />}
-        </Gallery>
+        </>
       );
     }
   }

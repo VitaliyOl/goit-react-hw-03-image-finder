@@ -1,5 +1,6 @@
 import React from 'react';
 import { ButtonMore } from './Button.styled';
+import PropTypes from 'prop-types';
 
 export function Button({ children, onClick = null }) {
   return (
@@ -8,3 +9,8 @@ export function Button({ children, onClick = null }) {
     </ButtonMore>
   );
 }
+
+Button.propTypes = {
+  children: PropTypes.any,
+  onClick: PropTypes.func,
+};

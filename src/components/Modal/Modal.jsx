@@ -16,7 +16,6 @@ export default class Modal extends Component {
   handleKeyDown = e => {
     if (e.code === `Escape`) {
       this.props.onClose();
-      console.log('escape');
     }
   };
 
