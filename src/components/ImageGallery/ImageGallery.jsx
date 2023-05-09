@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Gallery } from './ImageGallery.styled';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
-import imagesApi from '../services/fetchApi';
+import imagesApi from '../../services/fetchApi';
 import Modal from 'components/Modal/Modal';
 import { Button } from 'components/Button/Button';
 import Loader from '../Loader/Loader';
@@ -84,37 +84,35 @@ export default class ImageGallery extends Component {
     if (status === 'idle') {
       return <h1 style={{ margin: '0 auto' }}>Lets Go!</h1>;
     }
-    if (status === 'pending') {
-      return <Loader />;
-    }
+
     if (status === 'rejected') {
       return <h1>{error.message}</h1>;
     }
     if (images.length === 0) {
       return (
-        <h1>Oops... there are no '{value}' images matching your search... </h1>
+        <h1>Oops... there are no {value} images matching your search... </h1>
       );
     }
 
-    if (status === 'resolved') {
-      return (
-        <>
-          <Gallery>
-            {images.map(image => (
-              <ImageGalleryItem
-                key={image.id}
-                item={image}
-                onImageClick={this.setModalData}
-              />
-            ))}
-          </Gallery>
+    return (
+      <>
+        <Gallery>
+          {images.map(image => (
+            <ImageGalleryItem
+              key={image.id}
+              item={image}
+              onImageClick={this.setModalData}
+            />
+          ))}
+        </Gallery>
 
-          {images.length > 0 && status !== 'pending' && page <= totalPages && (
-            <Button onClick={this.loadMore}>Load More</Button>
-          )}
-          {showModal && <Modal data={modalData} onClose={this.togleModal} />}
-        </>
-      );
-    }
+        {status === 'pending' && <Loader />}
+
+        {images.length > 0 && status !== 'pending' && page <= totalPages && (
+          <Button onClick={this.loadMore}>Load More</Button>
+        )}
+        {showModal && <Modal data={modalData} onClose={this.togleModal} />}
+      </>
+    );
   }
 }
